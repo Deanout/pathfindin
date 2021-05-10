@@ -1,3 +1,5 @@
+var SimplexNoise = require('simplex-noise');
+
 const state = {
     grid: [],
     widthInPixels: 400,
@@ -13,7 +15,8 @@ const state = {
     gridTop: 0,
     gridBottom: 0,
     gridLeft: 0,
-    gridRight: 0
+    gridRight: 0,
+    seed: 1337
 };
 
 const getters = {
@@ -52,6 +55,47 @@ const actions = {
             for (let j = 0; j < state.numberOfRows; j++) {
                 let _id = i + j;
                 let nodeTypeIndex = Math.floor(Math.random() * nodeTypes.length);
+                localGrid[i].push({
+                    id: _id,
+                    nodeType: nodeTypes[nodeTypeIndex],
+                    xPosition: i,
+                    yPosition: j
+                });
+            }
+        }
+        commit("setRandomTerrain", localGrid);
+    },
+    generateSimplexTerrain: ({commit}, nodeTypes) => {
+        var localGrid = [];
+        window.nodeTypes = nodeTypes;
+        var simplex = new SimplexNoise(state.seed);
+        for (let i = 0; i < state.numberOfColumns; i++) {
+            localGrid.push([]);
+            for (let j = 0; j < state.numberOfRows; j++) {
+                let _id = i + j;
+                let nodeTypeIndex = 0;
+                let frequency = 0.8;
+                let amplitude = 1;
+                let simplexValue = simplex.noise2D(i / 20 * frequency, j / 20 * frequency) * amplitude;
+                simplexValue = (simplexValue + 1) / 2;
+                console.log(simplexValue);
+                // water
+                if (simplexValue > 0 && simplexValue <= 0.4) {
+                    nodeTypeIndex = 4;
+                }
+                // sand
+                else if (simplexValue > 0.4 && simplexValue <= 0.5) {
+                    nodeTypeIndex = 3;
+                }
+                // grass
+                else if (simplexValue > 0.5 && simplexValue <= 0.8) {
+                    nodeTypeIndex = 2;
+                }
+                // stone
+                else {
+                    nodeTypeIndex = 5;
+                }
+                
                 localGrid[i].push({
                     id: _id,
                     nodeType: nodeTypes[nodeTypeIndex],

@@ -2,13 +2,18 @@
   <button @click="generateRandomTerrain(nodeTypes)">
     Generate Random Terrain
     </button>
+      <button @click="generateSimplexTerrain(nodeTypes)">
+      Generate Simplex Terrain
+      </button>
     <select @change="selectNodeType($event)">
       <option value="0">Air</option>
       <option value="1">Wall</option>
       <option value="2">Grass</option>
+      <option value="3">Sand</option>
+      <option value="4">Water</option>
+      <option value="5">Stone</option>
     </select>
-  <div @click="setNodeType($event)"
-       @mouseover="setNodeType($event)">
+  <div @click="setNodeType($event)">
     <Grid 
     :grid="grid"
     :width="widthInPixels" 
@@ -45,6 +50,7 @@ export default {
     ...mapActions(['calculateGridOnWindowResize',
                   'updateGrid',
                   'generateRandomTerrain',
+                  'generateSimplexTerrain',
                   'selectNodeType',
                   'updateNodeAtPosition']),
     windowResized(event) {
