@@ -39,7 +39,8 @@ export default {
         height: window.innerHeight
       }
       this.calculateGridOnWindowResize(data);
-      this.initializeGrid();
+      //this.initializeGrid();
+      this.generateSimplexTerrain(this.nodeTypes);
   },
   unmounted() {
     window.removeEventListener("resize", this.windowResized);

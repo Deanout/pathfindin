@@ -67,7 +67,6 @@ const actions = {
     },
     generateSimplexTerrain: ({commit}, nodeTypes) => {
         var localGrid = [];
-        window.nodeTypes = nodeTypes;
         var simplex = new SimplexNoise(state.seed);
         for (let i = 0; i < state.numberOfColumns; i++) {
             localGrid.push([]);
@@ -95,7 +94,6 @@ const actions = {
                 else {
                     nodeTypeIndex = 5;
                 }
-                
                 localGrid[i].push({
                     id: _id,
                     nodeType: nodeTypes[nodeTypeIndex],
